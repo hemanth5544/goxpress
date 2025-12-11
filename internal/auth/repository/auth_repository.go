@@ -2,6 +2,8 @@ package repository
 
 import (
 	"github.com/hemanth5544/goxpress/internal/auth/model"
+	"github.com/hemanth5544/goxpress/internal/auth/dto"
+
 	"gorm.io/gorm"
 )
 
@@ -9,7 +11,7 @@ import (
 // in service we will use this interface to call the methods
 type IAuthRepository interface {
 	CreateUser(userRequest model.User) error
-	CheckUserExist(email string) (*model.User, error)
+	CheckUserExist(userLogin dto.LoginRequest) (*model.User, error)
 	GetUserById(id int) (*model.User, error)
 }
 
@@ -41,11 +43,11 @@ func (r *AuthRepository) CreateUser(userRequest model.User) error {
 	return nil
 }
 
-func (r *AuthRepository) CheckUserExist(email string) (*model.User, error) {
+func (r *AuthRepository) CheckUserExist(loginRequest dto.LoginRequest) (*model.User, error) {
 
 	var user model.User
 
-	if err := r.db.Where("email = ?", email).First(&user).Error; err != nil {
+	if err := r.db.Where("email = ?", loginRequest.Email).First(&user).Error; err != nil {
 		return nil, err
 	}
 	return &user, nil
