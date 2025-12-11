@@ -3,50 +3,32 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/hemanth5544/goxpress/internal/auth/model"
-	"github.com/hemanth5544/goxpress/internal/auth/service"
-
 	"github.com/gin-gonic/gin"
+	"github.com/hemanth5544/goxpress/internal/auth/dto"
+	"github.com/hemanth5544/goxpress/internal/auth/services"
 )
 
 type AuthHandler struct {
-	authService service.AuthService
+	service *services.AuthService
 }
 
-func NewAuthHandler(authService service.AuthService) *AuthHandler {
-	return &AuthHandler{authService: authService}
+func smaple(dto.AuthResponse) {
+
 }
 
-func (h *AuthHandler) Register(c *gin.Context) {
-	var user model.User
-	if err := c.ShouldBindJSON(&user); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+func (h *AuthHandler) RegisterUser(ctx *gin.Context) {
+
+	var request dto.RegisterRequest
+	//validation in node we user try call
+	//but in Go we mainly diffnetn on if and err !=nil
+	if err := ctx.ShouldBindJSON(&request); err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, dto.AuthResponse{Message: "Inavlid body Request"})
+	}
+
+	if err := h.service.Register(request.Username, request.Email, request.Password, "user"); err != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, dto.AuthResponse{Message: err.Error()})
 		return
 	}
 
-	if err := h.authService.Register(&user); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusCreated, gin.H{"message": "User registered successfully"})
-}
-
-func (h *AuthHandler) Login(c *gin.Context) {
-	var credentials struct {
-		Username string `json:"username"`
-		Password string `json:"password"`
-	}
-	if err := c.ShouldBindJSON(&credentials); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	token, err := h.authService.Login(credentials.Username, credentials.Password)
-	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"token": token})
+	ctx.JSON(http.StatusCreated, dto.AuthResponse{Message: "Register Success"})
 }
