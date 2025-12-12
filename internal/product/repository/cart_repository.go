@@ -20,6 +20,15 @@ type CartRepository struct {
 //? we will use this interface as to tight couple to acces repo function and all ok
 
 type CartRepositoryInterface interface {
+	FindOrCreateCart(userID uint) (*model.Cart, error)
+	AddToCart(cartID uint, item model.CartItem) error
+	UpdateCartItem(item model.CartItem) error
+	GetCartItem(userID uint) (*model.Cart, error)
+	FindCartItem(cartID uint, productID uint) (*model.CartItem, error)
+	RemoveCartItem(cartID uint, itemID uint) error
+	UpdateItemQuantity(productID uint, cartID uint, quantity int) error
+	GetCartByUserID(userID uint) (model.Cart, error)
+	ClearCart(cartID uint) error
 }
 
 func NewCartRepository(db *gorm.DB) *CartRepository {
