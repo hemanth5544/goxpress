@@ -1,4 +1,3 @@
-
 package handlers
 
 import (
@@ -15,7 +14,7 @@ func NewUserHandler(db *gorm.DB) *UserHandler {
 }
 
 func (h *UserHandler) GetUsers(c *fiber.Ctx) error {
-	var users []User 
+	var users []User
 
 	err := h.DB.Find(&users).Error
 	if err != nil {

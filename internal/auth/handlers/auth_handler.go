@@ -57,7 +57,7 @@ func (h *AuthHandler) RegisterAdmin(ctx *gin.Context) {
 
 }
 
-func (h *AuthHandler) Login(ctx *gin.Context)  {
+func (h *AuthHandler) Login(ctx *gin.Context) {
 	/**
 	*see this is a serailition & deserailaton
 	*we often see the clinet will interact with the JSON to api acuse browser env will have js% json
@@ -79,7 +79,7 @@ func (h *AuthHandler) Login(ctx *gin.Context)  {
 
 	//? res.setCookie()
 	ctx.SetCookie("Authorization", token, 3600, "/", "localhost", false, true)
-	
+
 	//? res.status(200).json(result)
-	ctx.JSON(http.StatusOK,dto.LoginResponse{Token: token})
+	ctx.JSON(http.StatusOK, dto.LoginResponse{Token: token})
 }

@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"github.com/hemanth5544/goxpress/internal/auth/model"
 	"github.com/hemanth5544/goxpress/internal/auth/dto"
+	"github.com/hemanth5544/goxpress/internal/auth/model"
 
 	"gorm.io/gorm"
 )
@@ -57,9 +57,9 @@ func (r *AuthRepository) CheckUserExist(loginRequest dto.LoginRequest) (*model.U
 func (r *AuthRepository) GetUserById(id int) (*model.User, error) {
 
 	var user model.User
-	// we need to pass teh addres od user &user 
-	//gorm internallly fill the fetched db data in hte user struct and gives us the 
-	// finally the result will has two retun either .Error or result wiht the user struct 
+	// we need to pass teh addres od user &user
+	//gorm internallly fill the fetched db data in hte user struct and gives us the
+	// finally the result will has two retun either .Error or result wiht the user struct
 	result := r.db.Find(&user, id)
 
 	if result.Error != nil {
