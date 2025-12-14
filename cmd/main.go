@@ -7,13 +7,18 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/hemanth5544/goxpress/initializers"
+	"github.com/hemanth5544/goxpress/internal/auth"
+	"github.com/hemanth5544/goxpress/internal/cart"
 	"github.com/hemanth5544/goxpress/internal/db"
+	"github.com/hemanth5544/goxpress/internal/product"
 )
 
 func main() {
 	initializers.LoadEnv()
-	db.ConnectDatabase()
-
+	db, err := db.ConnectDatabase()
+	if err != nil {
+		log.Println("Failed to connect database")
+	}
 	router := gin.Default()
 	router.GET("/ping", func(c *gin.Context) {
 
@@ -24,6 +29,14 @@ func main() {
 			"message": "pong",
 		})
 	})
+	//load our routes
+	auth.SetupAuth(router, db)
+	product.ProductRouter(router, db)
+	cart.SetupCart(router, db)
+	// order.SetupOrder(router, db)
+
+
+
 	port := os.Getenv("AP_PORT")
 
 	if err := router.Run(":" + port); err != nil {
