@@ -33,3 +33,7 @@ func (s *ProductServices) GetProductById(id int) (*model.Product, error) {
 func (s *ProductServices) GetAllProduct() (*[]model.Product, error) {
 	return s.repo.GetAllProduct()
 }
+
+func (s *ProductServices) UpdateProductById(productID uint, updateProductRequest model.Product) (*model.Product, error) {
+	return s.repo.UpdateProduct(productID, updateProductRequest)
+}
