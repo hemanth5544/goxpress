@@ -12,8 +12,8 @@ type AuthHandler struct {
 	service *services.AuthService
 }
 
-func smaple(dto.AuthResponse) {
-
+func NewAuthHandler(service *services.AuthService) *AuthHandler {
+	return &AuthHandler{service: service}
 }
 
 func (h *AuthHandler) RegisterUser(ctx *gin.Context) {
