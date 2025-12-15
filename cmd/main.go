@@ -10,6 +10,7 @@ import (
 	"github.com/hemanth5544/goxpress/internal/auth"
 	"github.com/hemanth5544/goxpress/internal/cart"
 	"github.com/hemanth5544/goxpress/internal/db"
+	"github.com/hemanth5544/goxpress/internal/order"
 	"github.com/hemanth5544/goxpress/internal/product"
 )
 
@@ -22,22 +23,21 @@ func main() {
 	router := gin.Default()
 	router.GET("/ping", func(c *gin.Context) {
 
-		//this "c" will have this /ping route all req,res c is a context
+	//?this "c" will have this /ping route all req,res c is a context
 
-		//c.ShouldBindJSON  will map the body paylod wiht the ree and contevert them to sturct ad the  incoing req was json'
+	//?c.ShouldBindJSON  will map the body paylod wiht the ree and contevert them to sturct ad the  incoing req was json'
 		c.JSON(200, gin.H{
 			"message": "pong",
 		})
 	})
-	//load our routes
+
+	//loading our routes
 	auth.SetupAuth(router, db)
 	product.ProductRouter(router, db)
 	cart.SetupCart(router, db)
-	// order.SetupOrder(router, db)
+	order.SetupOrder(router, db)
 
-
-
-	port := os.Getenv("AP_PORT")
+	port := os.Getenv("APP_PORT")
 
 	if err := router.Run(":" + port); err != nil {
 		log.Fatalf("Failed to connect to server: %v", err)
